@@ -186,6 +186,40 @@ The executable is not code-signed, so Windows SmartScreen may show a warning.
 Some antivirus products also flag one-file PyInstaller executables; add an
 exclusion or code-sign the binary for managed deployments.
 
+### 3.6 Linux executable
+
+A standalone Linux binary can be built using the provided `build_linux.sh` script.
+It produces a single-file executable `IndianPharmacyShop` (no `.exe` extension)
+that bundles Python, the backend, and the built UI. The target Linux machine
+does not need Python or Node.js.
+
+To build locally on Linux:
+
+```bash
+./build_linux.sh
+```
+
+The output is `dist/IndianPharmacyShop`. The build requires Python 3.10+ and
+Node.js 26+.
+
+By default the executable stores data in a `data` folder next to the binary:
+
+```text
+./data/pharmacy.db
+./data/uploads/
+```
+
+Set `PHARMACY_DATA_DIR` before starting the executable to use a different folder:
+
+```bash
+export PHARMACY_DATA_DIR=$HOME/.pharmacy-data
+./dist/IndianPharmacyShop
+```
+
+**Note:** The Linux binary is glibc/architecture-specific (built on Ubuntu 22.04
+→ runs on Ubuntu 22.04+). For broader Linux compatibility, Docker is
+recommended.
+
 ### 3.6 Frontend development with hot reload
 
 Run the backend on port 5000 in one terminal, then:
@@ -440,6 +474,8 @@ docker pull ghcr.io/vipulverulkar/indian-pharmacy-shop-standalone:1.0.0
 | EXE does not start | Blocked by SmartScreen or antivirus | Allow the app, or build/sign it yourself |
 | EXE data is not where expected | Default location is `%LOCALAPPDATA%` | Set `PHARMACY_DATA_DIR` before launching |
 | EXE build fails on Windows | Missing Python/Node or dependencies | Run `build_windows.bat` and check its output |
+| Linux binary fails to run | glibc/architecture mismatch | Build on target distro or use Docker |
+| Linux binary build fails | Missing Python/Node or dependencies | Run `./build_linux.sh` and check its output |
 
 ### Reset a development database
 

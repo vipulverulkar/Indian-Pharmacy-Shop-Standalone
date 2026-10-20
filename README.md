@@ -9,15 +9,15 @@ multi-stage Docker image for one-command deployment.
 
 | Login | Dashboard |
 |---|---|
-| ![Login](docs/screenshots/login.png) | ![Dashboard](docs/screenshots/dashboard.png) |
+| ![Login](doc/screenshots/login.png) | ![Dashboard](doc/screenshots/dashboard.png) |
 
 | Billing | Inventory |
 |---|---|
-| ![Billing](docs/screenshots/billing.png) | ![Inventory](docs/screenshots/inventory.png) |
+| ![Billing](doc/screenshots/billing.png) | ![Inventory](doc/screenshots/inventory.png) |
 
 | Reports | Invoice |
 |---|---|
-| ![Reports](docs/screenshots/reports.png) | ![Invoice](docs/screenshots/invoice.png) |
+| ![Reports](doc/screenshots/reports.png) | ![Invoice](doc/screenshots/invoice.png) |
 
 ## Documentation
 
@@ -152,12 +152,17 @@ docker rm -f pharmacy-test
 
 ## CI/CD
 
-- `.github/workflows/ci.yml` — backend lint/compile/tests, frontend build,
-  Docker build, and container health check on pull requests and `main`.
-- `.github/workflows/publish.yml` — multi-arch image push to GHCR on `main` and
-  tags; on `v*` tags it also creates a GitHub Release with a frontend bundle.
-- `.github/workflows/build-windows-exe.yml` — builds a standalone Windows EXE
-  on demand and attaches it to GitHub Releases for `v*` tags.
+- [`.github/workflows/ci.yml`](.github/workflows/ci.yml) — backend lint/compile/tests, frontend build, Docker build, and container health check on pull requests and `main`.
+- [`.github/workflows/cd.yml`](.github/workflows/cd.yml) — multi-arch image push to GHCR on `main` and tags; builds Windows & Linux standalone EXEs; on `v*` tags creates a GitHub Release with frontend bundle, Windows EXE, and Linux EXE.
+
+### Latest artifacts
+
+| Artifact | Link |
+|---|---|
+| Docker image (GHCR) | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/pkgs/container/indian-pharmacy-shop-standalone> |
+| Windows EXE | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml> (download from latest run) |
+| Linux EXE | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml> (download from latest run) |
+| GitHub Releases (tagged) | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/releases/latest> |
 
 The published image is
 `ghcr.io/vipulverulkar/indian-pharmacy-shop-standalone`.
@@ -210,13 +215,13 @@ tests/                Backend API and billing regression tests
 launcher.py           Desktop entrypoint for the packaged executable
 pharmacy.spec         PyInstaller build specification
 build_windows.bat     Local Windows EXE build script
-docs/screenshots/     README images
-.github/workflows/    CI, publish, and EXE build pipelines
-Dockerfile            Node build stage + Python runtime stage
-docker-compose.yml    One-command run with persistent volumes
+doc/screenshots/      README images
 doc/ARCHITECTURE.md   Design and data model
 doc/INSTALLATION.md   Installation and operations manual
 doc/USER_MANUAL.md    Day-to-day user guide
+.github/workflows/    CI, publish, and EXE build pipelines
+Dockerfile            Node build stage + Python runtime stage
+docker-compose.yml    One-command run with persistent volumes
 ruff.toml             Backend lint configuration
 start.bat             Windows launcher
 run.sh                Linux/macOS launcher

@@ -4,7 +4,7 @@ Indian Pharmacy Shop — Standalone is a counter-friendly billing, inventory, an
 GST invoicing application for a single pharmacy. This manual explains every
 screen and the daily workflow for admins and staff.
 
-![Dashboard](docs/screenshots/dashboard.png)
+![Dashboard](screenshots/dashboard.png)
 
 > Screenshots use demo data. They do not contain real customer information.
 
@@ -33,7 +33,7 @@ screen and the daily workflow for admins and staff.
 Open the app at `http://127.0.0.1:5000` (or the address shown by your launcher)
 and sign in.
 
-![Login](docs/screenshots/login.png)
+![Login](screenshots/login.png)
 
 - Default username: `admin`
 - Default password: `admin`
@@ -82,7 +82,7 @@ refreshes when you open it and after billing, returns, and stock changes.
 
 The Billing tab is the main checkout screen.
 
-![Billing](docs/screenshots/billing.png)
+![Billing](screenshots/billing.png)
 
 ### Find a medicine
 
@@ -149,7 +149,7 @@ Open the invoice and click **🖨 Print Invoice**. In the browser print dialog,
 choose a printer or **Save as PDF**. The printed page uses the dedicated print
 stylesheet.
 
-![Invoice](docs/screenshots/invoice.png)
+![Invoice](screenshots/invoice.png)
 
 ### Returns
 
@@ -168,7 +168,7 @@ The current version supports full returns only, not partial line returns.
 The Inventory tab lists medicines with batch, expiry, stock, price, MRP, GST,
 and actions.
 
-![Inventory](docs/screenshots/inventory.png)
+![Inventory](screenshots/inventory.png)
 
 ### Filters and sorting
 
@@ -267,7 +267,7 @@ names are suggested in the medicine and stock-in forms.
 
 The Reports tab shows sales performance.
 
-![Reports](docs/screenshots/reports.png)
+![Reports](screenshots/reports.png)
 
 - Switch between **Last 7 days**, **Last 14 days**, and **Last 30 days**.
 - **Daily revenue** bar chart.

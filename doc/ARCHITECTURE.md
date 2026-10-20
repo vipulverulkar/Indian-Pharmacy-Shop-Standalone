@@ -76,7 +76,7 @@ API still runs and `/` returns a hint to build the UI.
 ├── launcher.py           # Desktop entrypoint for the packaged executable
 ├── pharmacy.spec         # PyInstaller one-file build specification
 ├── build_windows.bat     # Local Windows EXE build
-├── docs/screenshots/     # README images
+├── screenshots/          # README images
 ├── .github/workflows/
 │   ├── ci.yml            # Pull-request and main-branch checks
 │   ├── publish.yml       # GHCR image + tagged release artifacts
@@ -252,16 +252,21 @@ not code-signed.
   - installs frontend dependencies with `npm ci`, builds the UI, uploads the
     dist artifact;
   - builds the Docker image and waits for its health endpoint.
-- `publish.yml` runs on pushes to `main`, version tags, and manual dispatch:
+- `cd.yml` runs on successful CI completion on `main`, on `v*` tags, and manual dispatch:
   - builds multi-architecture images (`linux/amd64`, `linux/arm64`);
   - pushes tags to GitHub Container Registry (`ghcr.io/<owner>/<repo>`);
-  - on `v*` tags, builds the frontend and attaches a zip bundle to a GitHub
-    Release.
-- `build-windows-exe.yml` runs manually and on `v*` tags:
-  - builds the frontend on a Windows runner;
-  - packages the backend and UI with PyInstaller;
-  - uploads `IndianPharmacyShop-windows.zip` and attaches it to tagged
-    releases.
+  - builds Windows EXE (`IndianPharmacyShop-windows.zip`) and Linux EXE (`IndianPharmacyShop-linux.zip`);
+  - uploads artifacts for download from workflow runs;
+  - on `v*` tags, builds the frontend and attaches a zip bundle, Windows EXE, and Linux EXE to a GitHub Release.
+
+### Latest artifacts
+
+| Artifact | Link |
+|---|---|
+| Docker image (GHCR) | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/pkgs/container/indian-pharmacy-shop-standalone> |
+| Windows EXE | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml> |
+| Linux EXE | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml> |
+| GitHub Releases (tagged) | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/releases/latest> |
 
 The Docker Hub image
 (`vipulverulkar/indian-pharmacy-shop-standalone`) is published manually; the

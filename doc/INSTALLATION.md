@@ -151,12 +151,16 @@ start.bat 5001
 
 ### 3.5 Windows executable (EXE)
 
-The GitHub Actions workflow **Build Windows EXE** produces a single-file
+The GitHub Actions workflow **CD** produces a single-file
 `IndianPharmacyShop.exe` that bundles Python, the backend, and the built UI. The
 target Windows machine does not need Python or Node.js.
 
-Download `IndianPharmacyShop-windows.zip` from a workflow run or a `v*` release,
-extract it, and double-click `IndianPharmacyShop.exe`. The launcher starts the
+Download `IndianPharmacyShop-windows.zip` from:
+
+- **Latest workflow run**: <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml> → click the latest successful run → Artifacts → `windows-exe`
+- **GitHub Release** (tagged versions): <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/releases/latest>
+
+Extract it, and double-click `IndianPharmacyShop.exe`. The launcher starts the
 server, opens the browser, and stops when its console window is closed.
 
 To build locally on Windows:
@@ -201,6 +205,11 @@ To build locally on Linux:
 
 The output is `dist/IndianPharmacyShop`. The build requires Python 3.10+ and
 Node.js 26+.
+
+**Prebuilt Linux executable**: Download `IndianPharmacyShop-linux.zip` from:
+
+- **Latest workflow run**: <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml> → click the latest successful run → Artifacts → `linux-exe`
+- **GitHub Release** (tagged versions): <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/releases/latest>
 
 By default the executable stores data in a `data` folder next to the binary:
 

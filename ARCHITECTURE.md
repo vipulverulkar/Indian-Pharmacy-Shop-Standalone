@@ -39,6 +39,7 @@ API still runs and `/` returns a hint to build the UI.
 | Layer | Technology | Notes |
 |---|---|---|
 | UI | React 18, Vite 5 | Single-page app; no router or global state library |
+| Build | Node.js 26, npm 11 | Vite production build |
 | Styling | Plain CSS | `frontend/src/index.css` |
 | API | Flask 3, Flask-CORS | JSON over `/api/*` |
 | ORM | SQLAlchemy 2 | Typed declarative models |

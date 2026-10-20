@@ -7,7 +7,7 @@
 #     pharmacy-app
 
 # ---------- Stage 1: build the frontend ----------
-FROM node:20-alpine AS ui
+FROM node:26-alpine AS ui
 WORKDIR /build
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci

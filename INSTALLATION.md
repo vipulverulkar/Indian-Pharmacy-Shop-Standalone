@@ -14,7 +14,7 @@ and troubleshooting for Indian Pharmacy Shop — Standalone.
 | Component | Version | Needed for |
 |---|---|---|
 | Python | 3.10 or newer | Backend API and migrations |
-| Node.js | 18 or newer | Building the React UI from source |
+| Node.js | 26 or newer | Building the React UI from source |
 | npm | Bundled with Node | Frontend dependencies |
 | Docker | 24 or newer (optional) | Container deployment |
 
@@ -381,7 +381,7 @@ docker pull ghcr.io/vipulverulkar/indian-pharmacy-shop-standalone:1.0.0
 | `Login required` immediately after restart | In-memory sessions were cleared | Log in again; expected behavior |
 | `Address already in use` | Port 5000 is busy | Use `PORT=5001` or `HOST_PORT=5001` |
 | Page shows "Build the frontend" | `frontend/dist` missing | Run `cd frontend && npm ci && npm run build` |
-| `npm ci` fails | Lockfile or Node version mismatch | Use Node 18+ and keep `package-lock.json` |
+| `npm ci` fails | Lockfile or Node version mismatch | Use Node 26+ and keep `package-lock.json` |
 | `No module named flask` | Dependencies not installed in the active environment | Activate the venv and reinstall `backend/requirements.txt` |
 | GST/unit/payment validation errors | Value is not in the active masters | Add or activate it under Masters |
 | Product images 404 | Uploads volume not mounted | Mount `/app/backend/uploads` or use compose |

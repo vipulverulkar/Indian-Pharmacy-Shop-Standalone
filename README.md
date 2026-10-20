@@ -40,6 +40,7 @@ multi-stage Docker image for one-command deployment.
 
 ## Quick start
 
+Requirements: Python 3.10+ for the backend, Node.js 26+ when building the UI.
 Default login: `admin` / `admin`. Change it immediately after first login.
 
 ### Docker (recommended)

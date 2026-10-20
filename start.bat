@@ -31,7 +31,7 @@ if errorlevel 1 (
     echo [2/3] Node.js not found - serving the previously built page.
   ) else (
     echo ERROR: Node.js not found and no built page exists yet.
-    echo Install Node.js LTS from https://nodejs.org/ , then re-run start.bat.
+    echo Install Node.js 26 or newer from https://nodejs.org/ , then re-run start.bat.
     pause
     exit /b 1
   )

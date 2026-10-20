@@ -6,15 +6,23 @@ multi-stage Docker image for one-command deployment.
 
 [![CI](https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/ci.yml/badge.svg)](https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/ci.yml)
 
-![Login](docs/screenshots/login.png)
+| Login | Dashboard |
+|---|---|
+| ![Login](docs/screenshots/login.png) | ![Dashboard](docs/screenshots/dashboard.png) |
 
 | Billing | Inventory |
 |---|---|
 | ![Billing](docs/screenshots/billing.png) | ![Inventory](docs/screenshots/inventory.png) |
 
+| Reports | Invoice |
+|---|---|
+| ![Reports](docs/screenshots/reports.png) | ![Invoice](docs/screenshots/invoice.png) |
+
 ## Documentation
 
-- [Installation manual](INSTALLATION.md) — local, Windows, Docker, upgrades,
+- [User manual](USER_MANUAL.md) — screen-by-screen guide to billing, inventory,
+  returns, reports, masters, users, and daily closing.
+- [Installation manual](INSTALLATION.md) — local, Windows, Docker, EXE, upgrades,
   backups, troubleshooting.
 - [Architecture](ARCHITECTURE.md) — components, data model, auth, API modules,
   deployment and CI/CD design.
@@ -37,6 +45,8 @@ multi-stage Docker image for one-command deployment.
   top sellers, and sales reports.
 - **One-command deployment** — Docker image serves API and UI from one process
   with persistent data volumes.
+- **Standalone Windows EXE** — a single PyInstaller executable with the UI and
+  backend bundled; no Python or Node.js on the target machine.
 
 ## Quick start
 
@@ -55,6 +65,13 @@ Open <http://localhost:5000>. If port 5000 is busy:
 
 ```bash
 HOST_PORT=5001 docker compose up -d --build
+```
+
+Prebuilt images are published to Docker Hub and GHCR:
+
+```bash
+docker pull vipulverulkar/indian-pharmacy-shop-standalone:latest
+docker pull ghcr.io/vipulverulkar/indian-pharmacy-shop-standalone:latest
 ```
 
 ### Windows
@@ -193,11 +210,12 @@ launcher.py           Desktop entrypoint for the packaged executable
 pharmacy.spec         PyInstaller build specification
 build_windows.bat     Local Windows EXE build script
 docs/screenshots/     README images
-.github/workflows/    CI and publish pipelines
+.github/workflows/    CI, publish, and EXE build pipelines
 Dockerfile            Node build stage + Python runtime stage
 docker-compose.yml    One-command run with persistent volumes
 ARCHITECTURE.md       Design and data model
 INSTALLATION.md       Installation and operations manual
+USER_MANUAL.md        Day-to-day user guide
 ruff.toml             Backend lint configuration
 start.bat             Windows launcher
 run.sh                Linux/macOS launcher

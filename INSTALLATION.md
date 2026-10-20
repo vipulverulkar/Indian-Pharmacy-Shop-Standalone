@@ -4,6 +4,7 @@ This manual covers local installation, production deployment, upgrades, backups,
 and troubleshooting for Indian Pharmacy Shop — Standalone.
 
 - Repository: <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone>
+- User guide: [USER_MANUAL.md](USER_MANUAL.md)
 - Stack: React 18 + Vite, Flask 3, SQLAlchemy 2, SQLite, waitress
 - Default login after first start: `admin` / `admin` (change it immediately)
 
@@ -61,21 +62,27 @@ docker compose down       # keeps data
 docker compose down -v    # deletes database and uploads volumes
 ```
 
-### Run the published image instead of building
+### Run a published image instead of building
 
-The CI pipeline publishes images to GitHub Container Registry:
+Images are available on Docker Hub and GitHub Container Registry:
 
 ```bash
-docker pull ghcr.io/vipulverulkar/indian-pharmacy-shop-standalone:latest
+docker pull vipulverulkar/indian-pharmacy-shop-standalone:latest
 
 docker run -d --name pharmacy \
   -p 5000:5000 \
   -v pharmacy-data:/data \
   -v pharmacy-uploads:/app/backend/uploads \
-  ghcr.io/vipulverulkar/indian-pharmacy-shop-standalone:latest
+  vipulverulkar/indian-pharmacy-shop-standalone:latest
 ```
 
-Private packages require a GHCR login:
+The equivalent GHCR image is:
+
+```bash
+docker pull ghcr.io/vipulverulkar/indian-pharmacy-shop-standalone:latest
+```
+
+Private GHCR packages require a login:
 
 ```bash
 echo "$GITHUB_TOKEN" | docker login ghcr.io -u <github-user> --password-stdin

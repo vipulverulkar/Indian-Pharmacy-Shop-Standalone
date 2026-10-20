@@ -70,6 +70,9 @@ API still runs and `/` returns a hint to build the UI.
 │   │   └── main.jsx
 │   └── dist/             # Generated production build (not hand-edited)
 ├── tests/                # Backend API and billing regression tests
+├── USER_MANUAL.md        # Day-to-day user guide
+├── INSTALLATION.md       # Installation and operations manual
+├── README.md             # Project overview and quick start
 ├── launcher.py           # Desktop entrypoint for the packaged executable
 ├── pharmacy.spec         # PyInstaller one-file build specification
 ├── build_windows.bat     # Local Windows EXE build
@@ -259,6 +262,11 @@ not code-signed.
   - packages the backend and UI with PyInstaller;
   - uploads `IndianPharmacyShop-windows.zip` and attaches it to tagged
     releases.
+
+The Docker Hub image
+(`vipulverulkar/indian-pharmacy-shop-standalone`) is published manually; the
+automatic pipeline publishes to GHCR. Both images are built from the same
+`Dockerfile`.
 
 ## Operational considerations
 

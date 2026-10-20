@@ -50,7 +50,7 @@
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, Arial, 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif;
   background: radial-gradient(1200px 400px at 20% -10%, rgba(20, 184, 166, 0.18), transparent),
     radial-gradient(900px 380px at 90% 0%, rgba(15, 118, 110, 0.14), transparent), var(--bg);
   color: var(--ink);

@@ -1,11 +1,19 @@
-"""Windows-friendly production server: migrate, then serve with waitress.
+"""
+Indian Pharmacy Shop - Windows-friendly production server
+Copyright (C) 2024 Vipul Verulkar
 
-Run from the ``backend/`` directory (``start.bat`` does this)::
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    python serve.py
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
-Uses ``HOST`` / ``PORT`` / ``ADMIN_USER`` / ``ADMIN_PASS`` / ``SESSION_HOURS`` /
-``DATABASE_URL`` from the environment, same as ``app.py``.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
 import os

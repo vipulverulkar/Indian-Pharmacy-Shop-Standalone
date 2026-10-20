@@ -5,6 +5,7 @@ store. React + Vite frontend, Flask + SQLAlchemy backend, SQLite database, and a
 multi-stage Docker image for one-command deployment.
 
 [![CI](https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/ci.yml/badge.svg)](https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/ci.yml)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 | Login | Dashboard |
 |---|---|
@@ -230,4 +231,12 @@ the backup commands in [doc/INSTALLATION.md](doc/INSTALLATION.md).
 
 ## License
 
-Add a license before distributing the application publicly.
+This project is licensed under the GNU General Public License v3.0 (GPL-3.0-or-later).
+See [LICENSE](LICENSE) for the full license text.
+
+In summary:
+- You may freely use, modify, and distribute this software
+- You must include the license and copyright notice in all copies
+- You must make source code available to recipients
+- Modified versions must carry prominent notices of changes
+- No warranty is provided

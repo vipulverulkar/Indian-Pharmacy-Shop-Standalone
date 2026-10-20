@@ -1,13 +1,19 @@
-"""Pharmacy backend — Flask + SQLAlchemy ORM + SQLite REST API.
+"""
+Indian Pharmacy Shop - Pharmacy backend Flask + SQLAlchemy REST API
+Copyright (C) 2024 Vipul Verulkar
 
-Run:
-    pip install -r requirements.txt
-    python app.py
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-API listens on http://127.0.0.1:5000 (or $PORT).
-Database: SQLite file pharmacy.db by default; override with $DATABASE_URL,
-e.g. DATABASE_URL=postgresql+psycopg2://user:pass@localhost/pharmacy
-Schema is managed by migrations.migrate() (versioned, idempotent).
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
 import os

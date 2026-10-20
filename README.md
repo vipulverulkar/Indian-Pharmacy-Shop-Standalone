@@ -20,11 +20,11 @@ multi-stage Docker image for one-command deployment.
 
 ## Documentation
 
-- [User manual](USER_MANUAL.md) — screen-by-screen guide to billing, inventory,
+- [User manual](doc/USER_MANUAL.md) — screen-by-screen guide to billing, inventory,
   returns, reports, masters, users, and daily closing.
-- [Installation manual](INSTALLATION.md) — local, Windows, Docker, EXE, upgrades,
+- [Installation manual](doc/INSTALLATION.md) — local, Windows, Docker, EXE, upgrades,
   backups, troubleshooting.
-- [Architecture](ARCHITECTURE.md) — components, data model, auth, API modules,
+- [Architecture](doc/ARCHITECTURE.md) — components, data model, auth, API modules,
   deployment and CI/CD design.
 
 ## Features
@@ -104,7 +104,7 @@ cd backend && python serve.py
 Open <http://127.0.0.1:5000>. For development with hot reload, run
 `python app.py` and `npm run dev` in separate terminals.
 
-See [INSTALLATION.md](INSTALLATION.md) for all options, configuration,
+See [doc/INSTALLATION.md](doc/INSTALLATION.md) for all options, configuration,
 PostgreSQL notes, backups, and troubleshooting.
 
 ## Configuration
@@ -213,9 +213,9 @@ docs/screenshots/     README images
 .github/workflows/    CI, publish, and EXE build pipelines
 Dockerfile            Node build stage + Python runtime stage
 docker-compose.yml    One-command run with persistent volumes
-ARCHITECTURE.md       Design and data model
-INSTALLATION.md       Installation and operations manual
-USER_MANUAL.md        Day-to-day user guide
+doc/ARCHITECTURE.md   Design and data model
+doc/INSTALLATION.md   Installation and operations manual
+doc/USER_MANUAL.md    Day-to-day user guide
 ruff.toml             Backend lint configuration
 start.bat             Windows launcher
 run.sh                Linux/macOS launcher
@@ -226,7 +226,7 @@ run.sh                Linux/macOS launcher
 Data lives in `backend/pharmacy.db`; uploaded logos live in
 `backend/uploads/`. Docker deployments use the `pharmacy-data` and
 `pharmacy-uploads` volumes. Stop the app before copying the SQLite file, or use
-the backup commands in [INSTALLATION.md](INSTALLATION.md).
+the backup commands in [doc/INSTALLATION.md](doc/INSTALLATION.md).
 
 ## License
 

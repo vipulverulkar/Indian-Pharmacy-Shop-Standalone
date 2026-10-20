@@ -142,7 +142,44 @@ busy:
 start.bat 5001
 ```
 
-### 3.5 Frontend development with hot reload
+### 3.5 Windows executable (EXE)
+
+The GitHub Actions workflow **Build Windows EXE** produces a single-file
+`IndianPharmacyShop.exe` that bundles Python, the backend, and the built UI. The
+target Windows machine does not need Python or Node.js.
+
+Download `IndianPharmacyShop-windows.zip` from a workflow run or a `v*` release,
+extract it, and double-click `IndianPharmacyShop.exe`. The launcher starts the
+server, opens the browser, and stops when its console window is closed.
+
+To build locally on Windows:
+
+```bat
+build_windows.bat
+```
+
+The output is `dist\IndianPharmacyShop.exe`. The build requires Python 3.10+ and
+Node.js 26+.
+
+By default the EXE stores data in `%LOCALAPPDATA%\IndianPharmacyShop`:
+
+```text
+%LOCALAPPDATA%\IndianPharmacyShop\pharmacy.db
+%LOCALAPPDATA%\IndianPharmacyShop\uploads\
+```
+
+Set `PHARMACY_DATA_DIR` before starting the EXE to use a portable folder:
+
+```bat
+set PHARMACY_DATA_DIR=%CD%\data
+IndianPharmacyShop.exe
+```
+
+The executable is not code-signed, so Windows SmartScreen may show a warning.
+Some antivirus products also flag one-file PyInstaller executables; add an
+exclusion or code-sign the binary for managed deployments.
+
+### 3.6 Frontend development with hot reload
 
 Run the backend on port 5000 in one terminal, then:
 
@@ -171,6 +208,8 @@ Configuration is read from environment variables at process start.
 | `ADMIN_PASS` | `admin` | Seeded admin password (first run only) |
 | `SESSION_HOURS` | `12` | Bearer-token lifetime in hours |
 | `DATABASE_URL` | `sqlite:///backend/pharmacy.db` | SQLAlchemy database URL |
+| `PHARMACY_DATA_DIR` | Backend folder, or `%LOCALAPPDATA%\IndianPharmacyShop` in the EXE | Database and uploads directory |
+| `PHARMACY_DIST_DIR` | Bundled `frontend/dist` or repository build | Override the served UI directory |
 | `API_URL` | `http://127.0.0.1:5000` | Dev-only Vite proxy target |
 
 The admin variables are used only while seeding. Changing them later does not
@@ -298,12 +337,15 @@ docker rm -f pharmacy-test
 ### GitHub Actions
 
 - **CI** (`.github/workflows/ci.yml`) runs on pull requests and pushes to
-  `main`: Ruff, `compileall`, optional pytest, `npm ci` + build, Docker build,
-  and a container health check.
+  `main`: Ruff, `compileall`, pytest, `npm ci` + build, Docker build, and a
+  container health check.
 - **Publish** (`.github/workflows/publish.yml`) runs on `main`, version tags,
   and manual dispatch:
   - pushes multi-arch images to GHCR;
   - creates a GitHub Release with a frontend bundle for tags such as `v1.0.0`.
+- **Build Windows EXE** (`.github/workflows/build-windows-exe.yml`) runs on
+  demand and on `v*` tags: builds the frontend, packages the app with
+  PyInstaller, uploads the zip artifact, and attaches it to tagged releases.
 
 Create a release:
 
@@ -388,6 +430,9 @@ docker pull ghcr.io/vipulverulkar/indian-pharmacy-shop-standalone:1.0.0
 | Database locked | Multiple writers or a network filesystem | Run one process; keep SQLite on local disk |
 | Container unhealthy | Migrations or startup error | `docker logs pharmacy` and test `/api/health` |
 | GHCR `denied` | Package is private or token lacks scope | `docker login ghcr.io` with a valid token |
+| EXE does not start | Blocked by SmartScreen or antivirus | Allow the app, or build/sign it yourself |
+| EXE data is not where expected | Default location is `%LOCALAPPDATA%` | Set `PHARMACY_DATA_DIR` before launching |
+| EXE build fails on Windows | Missing Python/Node or dependencies | Run `build_windows.bat` and check its output |
 
 ### Reset a development database
 

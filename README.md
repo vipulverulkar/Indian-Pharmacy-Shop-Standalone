@@ -62,6 +62,17 @@ HOST_PORT=5001 docker compose up -d --build
 Double-click `start.bat`; it installs dependencies, builds the UI, and opens the
 app. Optional port argument: `start.bat 5001`.
 
+### Windows executable
+
+Download `IndianPharmacyShop-windows.zip` from the latest **Build Windows EXE**
+workflow run, extract it, and double-click `IndianPharmacyShop.exe`. No Python or
+Node.js is required on the target machine. To build locally on Windows, run
+`build_windows.bat`; the output is `dist\IndianPharmacyShop.exe`.
+
+The EXE stores its database and uploads in
+`%LOCALAPPDATA%\IndianPharmacyShop`. Set `PHARMACY_DATA_DIR` to use a different
+folder. Close the console window to stop the server.
+
 ### Linux / macOS
 
 ```bash
@@ -127,6 +138,8 @@ docker rm -f pharmacy-test
   Docker build, and container health check on pull requests and `main`.
 - `.github/workflows/publish.yml` — multi-arch image push to GHCR on `main` and
   tags; on `v*` tags it also creates a GitHub Release with a frontend bundle.
+- `.github/workflows/build-windows-exe.yml` — builds a standalone Windows EXE
+  on demand and attaches it to GitHub Releases for `v*` tags.
 
 The published image is
 `ghcr.io/vipulverulkar/indian-pharmacy-shop-standalone`.
@@ -176,6 +189,9 @@ INR, and `unit` is tablet/capsule/sachet/strip/bottle/syrup/injection/tube.
 backend/              Flask API, models, migrations, waitress entrypoint
 frontend/             React source and Vite build output
 tests/                Backend API and billing regression tests
+launcher.py           Desktop entrypoint for the packaged executable
+pharmacy.spec         PyInstaller build specification
+build_windows.bat     Local Windows EXE build script
 docs/screenshots/     README images
 .github/workflows/    CI and publish pipelines
 Dockerfile            Node build stage + Python runtime stage

@@ -70,10 +70,14 @@ API still runs and `/` returns a hint to build the UI.
 │   │   └── main.jsx
 │   └── dist/             # Generated production build (not hand-edited)
 ├── tests/                # Backend API and billing regression tests
+├── launcher.py           # Desktop entrypoint for the packaged executable
+├── pharmacy.spec         # PyInstaller one-file build specification
+├── build_windows.bat     # Local Windows EXE build
 ├── docs/screenshots/     # README images
 ├── .github/workflows/
 │   ├── ci.yml            # Pull-request and main-branch checks
-│   └── publish.yml       # GHCR image + tagged release artifacts
+│   ├── publish.yml       # GHCR image + tagged release artifacts
+│   └── build-windows-exe.yml  # PyInstaller EXE + release asset
 ├── Dockerfile            # Multi-stage production image
 ├── docker-compose.yml    # Local/production compose with persistent volumes
 ├── ruff.toml             # Backend lint configuration
@@ -222,6 +226,21 @@ browser -> published port :5000 -> container waitress -> /data/pharmacy.db
 defines a health check against `/api/health`. The container runs as a
 non-root user (`uid 10001`).
 
+### Windows executable
+
+```text
+double-click EXE -> launcher.py -> waitress on 127.0.0.1:5000
+                                  -> bundled frontend/dist (PyInstaller _MEIPASS)
+                                  -> %LOCALAPPDATA%\IndianPharmacyShop\pharmacy.db
+```
+
+`pharmacy.spec` builds a one-file executable that embeds Python, the backend,
+and the frontend build. At runtime `backend/app.py` switches to a writable data
+directory (`PHARMACY_DATA_DIR` or `%LOCALAPPDATA%\IndianPharmacyShop`) and reads
+the UI from the PyInstaller extraction directory. The launcher picks a free port,
+opens the default browser, and stops when the console window closes. The EXE is
+not code-signed.
+
 ### CI/CD pipeline
 
 - `ci.yml` runs on pull requests and pushes to `main`:
@@ -235,6 +254,11 @@ non-root user (`uid 10001`).
   - pushes tags to GitHub Container Registry (`ghcr.io/<owner>/<repo>`);
   - on `v*` tags, builds the frontend and attaches a zip bundle to a GitHub
     Release.
+- `build-windows-exe.yml` runs manually and on `v*` tags:
+  - builds the frontend on a Windows runner;
+  - packages the backend and UI with PyInstaller;
+  - uploads `IndianPharmacyShop-windows.zip` and attaches it to tagged
+    releases.
 
 ## Operational considerations
 

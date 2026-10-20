@@ -14,6 +14,7 @@ import os
 import re
 import math
 import secrets
+import sys
 import time
 import uuid
 from datetime import datetime
@@ -42,15 +43,40 @@ from models import (
     User,
 )
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FROZEN = bool(getattr(sys, "frozen", False))
+SOURCE_DIR = os.path.dirname(os.path.abspath(__file__))
+BUNDLE_DIR = getattr(sys, "_MEIPASS", SOURCE_DIR)
+
+
+def _data_dir():
+    override = os.environ.get("PHARMACY_DATA_DIR")
+    if override:
+        return os.path.abspath(os.path.expanduser(override))
+    if FROZEN:
+        if os.name == "nt":
+            return os.path.join(
+                os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"),
+                "IndianPharmacyShop",
+            )
+        return os.path.join(os.path.expanduser("~"), ".local", "share", "indian-pharmacy-shop")
+    return SOURCE_DIR
+
+
+BASE_DIR = _data_dir()
 DB_PATH = os.path.join(BASE_DIR, "pharmacy.db")
 UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 ALLOWED_LOGOS = {"png", "jpg", "jpeg", "gif", "webp", "svg"}
 
-DATABASE_URL = os.environ.get("DATABASE_URL") or f"sqlite:///{DB_PATH}"
+DATABASE_URL = os.environ.get("DATABASE_URL") or "sqlite:///" + DB_PATH.replace("\\", "/")
 
-# If a Vite production build exists at ../frontend/dist, serve it.
-DIST_DIR = os.path.normpath(os.path.join(BASE_DIR, "..", "frontend", "dist"))
+# If a Vite production build exists, serve it. PyInstaller bundles it under
+# frontend/dist inside the extraction directory.
+DIST_DIR = os.environ.get("PHARMACY_DIST_DIR") or (
+    os.path.join(BUNDLE_DIR, "frontend", "dist")
+    if FROZEN
+    else os.path.normpath(os.path.join(SOURCE_DIR, "..", "frontend", "dist"))
+)
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 2 * 1024 * 1024  # logo uploads ≤ 2 MB

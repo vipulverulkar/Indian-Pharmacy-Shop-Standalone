@@ -157,12 +157,20 @@ docker rm -f pharmacy-test
 
 ### Latest artifacts
 
-| Artifact | Link |
-|---|---|
-| Docker image (GHCR) | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/pkgs/container/indian-pharmacy-shop-standalone> |
-| Windows EXE | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml> (download from latest run) |
-| Linux EXE | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml> (download from latest run) |
-| GitHub Releases (tagged) | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/releases/latest> |
+| Artifact | Direct download | View runs |
+|---|---|---|
+| Docker image (GHCR) | `docker pull ghcr.io/vipulverulkar/indian-pharmacy-shop-standalone:latest` | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/pkgs/container/indian-pharmacy-shop-standalone> |
+| Windows EXE | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml> → latest run → Artifacts → `windows-exe` | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml> |
+| Linux EXE | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml> → latest run → Artifacts → `linux-exe` | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml> |
+| GitHub Releases (tagged) | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/releases/latest> | <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/releases> |
+
+> **Note:** GitHub Actions artifacts require authentication and their IDs change per run. For direct scripted downloads, use the GitHub API:
+> ```bash
+> # Get latest Windows EXE artifact URL
+> curl -H "Accept: application/vnd.github+json" \
+>   https://api.github.com/repos/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml/runs?status=success\&per_page=1 \
+>   | jq -r '.workflow_runs[0].artifacts_url'
+> ```
 
 The published image is
 `ghcr.io/vipulverulkar/indian-pharmacy-shop-standalone`.

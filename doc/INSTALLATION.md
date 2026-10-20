@@ -160,6 +160,22 @@ Download `IndianPharmacyShop-windows.zip` from:
 - **Latest workflow run**: <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml> → click the latest successful run → Artifacts → `windows-exe`
 - **GitHub Release** (tagged versions): <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/releases/latest>
 
+**Direct API download** (for scripts/CI):
+```bash
+# Get latest successful run's windows-exe artifact download URL
+RUN_ID=$(curl -s -H "Accept: application/vnd.github+json" \
+  "https://api.github.com/repos/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml/runs?status=success&per_page=1" \
+  | jq -r '.workflow_runs[0].id')
+
+ARTIFACT_ID=$(curl -s -H "Accept: application/vnd.github+json" \
+  "https://api.github.com/repos/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/runs/$RUN_ID/artifacts" \
+  | jq -r '.artifacts[] | select(.name=="windows-exe") | .id')
+
+curl -L -o IndianPharmacyShop-windows.zip \
+  -H "Authorization: Bearer $GITHUB_TOKEN" \
+  "https://api.github.com/repos/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/artifacts/$ARTIFACT_ID/zip"
+```
+
 Extract it, and double-click `IndianPharmacyShop.exe`. The launcher starts the
 server, opens the browser, and stops when its console window is closed.
 
@@ -210,6 +226,22 @@ Node.js 26+.
 
 - **Latest workflow run**: <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml> → click the latest successful run → Artifacts → `linux-exe`
 - **GitHub Release** (tagged versions): <https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/releases/latest>
+
+**Direct API download** (for scripts/CI):
+```bash
+# Get latest successful run's linux-exe artifact download URL
+RUN_ID=$(curl -s -H "Accept: application/vnd.github+json" \
+  "https://api.github.com/repos/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/cd.yml/runs?status=success&per_page=1" \
+  | jq -r '.workflow_runs[0].id')
+
+ARTIFACT_ID=$(curl -s -H "Accept: application/vnd.github+json" \
+  "https://api.github.com/repos/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/runs/$RUN_ID/artifacts" \
+  | jq -r '.artifacts[] | select(.name=="linux-exe") | .id')
+
+curl -L -o IndianPharmacyShop-linux.zip \
+  -H "Authorization: Bearer $GITHUB_TOKEN" \
+  "https://api.github.com/repos/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/artifacts/$ARTIFACT_ID/zip"
+```
 
 By default the executable stores data in a `data` folder next to the binary:
 

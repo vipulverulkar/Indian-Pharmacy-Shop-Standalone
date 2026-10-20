@@ -15,14 +15,11 @@ from sqlalchemy.orm import Session
 
 from models import (
     Base,
-    Bill,
     Customer,
     GstRate,
     Medicine,
     PaymentMode,
-    StockMovement,
     StoreSetting,
-    Supplier,
     UnitType,
     User,
 )

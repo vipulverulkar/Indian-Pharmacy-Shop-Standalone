@@ -1,11 +1,15 @@
 *.db
 *.db-journal
+*.db.bak-*
 __pycache__/
 *.pyc
+.ruff_cache/
+.pytest_cache/
 node_modules/
 frontend/dist/
 backend/uploads/*
 !backend/uploads/.gitkeep
 .venv/
 venv/
+.env
 nohup.out

@@ -1474,7 +1474,6 @@ def sales_report():
     returned_ids = {b.id for b in bills if (getattr(b, "status", "completed") or "completed") == "returned"}
     agg = {}
     for it in s.query(BillItem).all():
-        b_day = None
         if it.bill_id in returned_ids:
             continue
         a = agg.setdefault(it.medicine_name or "?", {"name": it.medicine_name or "?", "qty": 0, "revenue": 0.0})

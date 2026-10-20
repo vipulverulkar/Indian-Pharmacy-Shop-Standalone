@@ -1,118 +1,198 @@
-# Pharmacy Billing App (₹ INR)
+# Indian Pharmacy Shop — Standalone
 
-Counter-friendly pharmacy billing + inventory app. **React + Vite** frontend, **Python Flask + SQLAlchemy** backend, **SQLite** database (auto-created with sample stock).
+Counter-friendly pharmacy billing, inventory, and GST invoicing for a single
+store. React + Vite frontend, Flask + SQLAlchemy backend, SQLite database, and a
+multi-stage Docker image for one-command deployment.
+
+[![CI](https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/ci.yml/badge.svg)](https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone/actions/workflows/ci.yml)
 
 ![Login](docs/screenshots/login.png)
-
-## Screens
 
 | Billing | Inventory |
 |---|---|
 | ![Billing](docs/screenshots/billing.png) | ![Inventory](docs/screenshots/inventory.png) |
 
+## Documentation
+
+- [Installation manual](INSTALLATION.md) — local, Windows, Docker, upgrades,
+  backups, troubleshooting.
+- [Architecture](ARCHITECTURE.md) — components, data model, auth, API modules,
+  deployment and CI/CD design.
+
 ## Features
 
-- **Billing** — name/salt/batch search (Enter adds first match), quantity steppers capped at stock, per-line rates, bill-level discount %, payment modes (Cash/UPI/Card/Credit/Other), cash-tendered → change calculator, printable GST TAX INVOICE with amount-in-words.
-- **Inventory** — add/edit/remove medicines, stock adjustments with audit ledger, low/out-of-stock, expiring/expired and prescription-drug filters, sorting, suppliers + purchase/stock-in entries.
-- **Server-side pagination** — `GET /api/medicines` and `GET /api/bills` are paged (`?page=&per_page=&search=`), so catalogs with 100k+ rows stay fast.
-- **Masters (admin)** — GST slabs, medicine types, payment modes, store profile (name, address, GSTIN, logo, low-stock threshold).
-- **Users & roles** — admin (everything) vs staff (billing + view-only inventory). Token sessions (12 h), hashed passwords.
-- **Dashboard & reports** — today's sales, stock value, low/expired alerts, top sellers, sales reports.
+- **Billing** — name/salt/batch search, stock-capped quantities, per-line
+  rates, bill-level discount, payment modes, cash-tendered change calculator,
+  printable GST invoice with amount in words.
+- **Inventory** — add/edit/remove medicines, stock adjustments with an audit
+  ledger, low/out-of-stock, expiring/expired and prescription-drug filters,
+  sorting, suppliers, and purchase/stock-in entries.
+- **Server-side pagination** — medicines and bills stay fast with large
+  catalogues.
+- **Masters** — GST slabs, medicine types, payment modes, store profile with
+  name, address, GSTIN, logo, and low-stock threshold.
+- **Users and roles** — admin (everything) and staff (billing plus read-only
+  inventory), hashed passwords, 12-hour bearer sessions.
+- **Dashboard and reports** — today's sales, stock value, low/expired alerts,
+  top sellers, and sales reports.
+- **One-command deployment** — Docker image serves API and UI from one process
+  with persistent data volumes.
 
-## Installation
+## Quick start
 
-Requirements: **Python 3.10+**. Node.js 18+ only if you want the Vite dev server (the prebuilt UI in `frontend/dist` is served by Flask, so Node is optional for just running the app).
+Default login: `admin` / `admin`. Change it immediately after first login.
 
-### Option A — Windows (easiest)
-
-1. Install Python 3.10+ (tick **"Add python.exe to PATH"**) and Node.js LTS (only needed once, to rebuild the UI).
-2. Download/clone this folder.
-3. Double-click **`start.bat`** — installs deps, builds the page on first run, opens the app in your browser.
-4. Log in with `admin` / `admin`.
-
-If port 5000 is busy: run `start.bat 5001` from a terminal instead.
-
-### Option B — Linux / macOS
-
-```bash
-# 1. Backend (serves API + prebuilt UI)
-cd backend
-pip install -r requirements.txt
-python app.py
-# App → http://127.0.0.1:5000/   API → http://127.0.0.1:5000/api/health
-```
-
-If port 5000 is busy: `PORT=5001 python app.py`.
+### Docker (recommended)
 
 ```bash
-# 2. Frontend dev server (optional — hot reload while developing UI)
-cd frontend
-npm install
-npm run dev
-# UI → http://127.0.0.1:5173 (proxies /api to Flask)
+git clone https://github.com/vipulverulkar/Indian-Pharmacy-Shop-Standalone.git
+cd Indian-Pharmacy-Shop-Standalone
+docker compose up -d --build
 ```
 
-Production UI rebuild after frontend changes:
+Open <http://localhost:5000>. If port 5000 is busy:
 
 ```bash
-cd frontend && npm run build   # Flask serves frontend/dist automatically
+HOST_PORT=5001 docker compose up -d --build
 ```
 
-### Configuration (environment variables)
+### Windows
+
+Double-click `start.bat`; it installs dependencies, builds the UI, and opens the
+app. Optional port argument: `start.bat 5001`.
+
+### Linux / macOS
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r backend/requirements.txt
+
+cd frontend && npm ci && npm run build && cd ..
+cd backend && python serve.py
+```
+
+Open <http://127.0.0.1:5000>. For development with hot reload, run
+`python app.py` and `npm run dev` in separate terminals.
+
+See [INSTALLATION.md](INSTALLATION.md) for all options, configuration,
+PostgreSQL notes, backups, and troubleshooting.
+
+## Configuration
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `PORT` | `5000` | Backend port |
-| `ADMIN_USER` / `ADMIN_PASS` | `admin` / `admin` | Seeded admin login (first run) |
-| `SESSION_HOURS` | `12` | Login token lifetime |
-| `DATABASE_URL` | `backend/pharmacy.db` | SQLite file, or e.g. `postgresql+psycopg2://user:pass@localhost/pharmacy` |
+| `HOST` | `0.0.0.0` | Bind address for the production server |
+| `PORT` | `5000` | HTTP port |
+| `ADMIN_USER` / `ADMIN_PASS` | `admin` / `admin` | Seeded admin login (first run only) |
+| `SESSION_HOURS` | `12` | Bearer-token lifetime |
+| `DATABASE_URL` | `backend/pharmacy.db` | SQLAlchemy database URL |
 
-Change the admin password after first login via the **Users/Account** tab.
+Example:
 
-## Data & backups
+```bash
+ADMIN_USER=owner ADMIN_PASS='change-me' SESSION_HOURS=8 PORT=5001 python serve.py
+```
 
-- All data lives in **`backend/pharmacy.db`** — copy that file to back up. Versioned migrations in `backend/migrations.py` upgrade old DB files automatically on startup.
-- Bulk catalogue import: place a CSV at `backend/uploads/medicine_data.csv` (`product_name, salt_composition, product_price, product_manufactured, medicine_desc, side_effects, …`) and import it into `medicines` with sensible defaults (quantity, GST slab, unit inference).
-- Uploaded store logos live in `backend/uploads/`.
+## Development
 
-## API
+```bash
+# Backend
+pip install -r backend/requirements.txt
+pip install ruff pytest
+ruff check backend
+python -m compileall -q backend
+python -m pytest -q
 
-All `/api/medicines` and `/api/bills` endpoints require login (`Authorization: Bearer <token>`); writes require admin unless noted.
+# Frontend
+cd frontend
+npm ci
+npm run build
+npm run dev        # http://127.0.0.1:5173, proxies /api to :5000
+```
+
+### Tests and container checks
+
+```bash
+docker build -t pharmacy-app .
+docker run -d --name pharmacy-test -p 5000:5000 pharmacy-app
+curl http://127.0.0.1:5000/api/health
+docker rm -f pharmacy-test
+```
+
+## CI/CD
+
+- `.github/workflows/ci.yml` — backend lint/compile/tests, frontend build,
+  Docker build, and container health check on pull requests and `main`.
+- `.github/workflows/publish.yml` — multi-arch image push to GHCR on `main` and
+  tags; on `v*` tags it also creates a GitHub Release with a frontend bundle.
+
+The published image is
+`ghcr.io/vipulverulkar/indian-pharmacy-shop-standalone`.
+
+Create a release:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+## API overview
+
+All `/api/medicines` and `/api/bills` endpoints require
+`Authorization: Bearer <token>`; writes require admin unless noted.
 
 **Medicines**
 
-- `GET /api/medicines?search=&unit=&stock=&sort=&page=1&per_page=20` → `{medicines, total, page, per_page, total_pages}` (omit `page` for legacy plain array). `stock`: `all|low|out|expiring|expired|rx`. `sort`: `name|stock|expiry|value`.
-- `POST /api/medicines` — `{name, composition, unit, batch_no, expiry_date, quantity, price, gst_percent, description, usage, mrp, supplier, rack, schedule, rx_required, min_stock}` (admin)
-- `PUT /api/medicines/:id`, `DELETE /api/medicines/:id` (admin)
-- `POST /api/medicines/:id/adjust` — `{delta, reason}` stock correction (admin)
+- `GET /api/medicines?search=&unit=&stock=&sort=&page=1&per_page=20`
+- `POST /api/medicines`, `PUT/DELETE /api/medicines/:id` (admin)
+- `POST /api/medicines/:id/adjust` — stock correction (admin)
 
 **Billing**
 
-- `POST /api/bills` — `{customer_name, customer_phone, doctor_name, prescription_no, discount_percent, payment_mode, items:[{medicine_id, qty}]}` (stock decremented, GST applied)
-- `GET /api/bills?page=1&per_page=10&search=&status=&from=&to=` → `{bills, total, page, per_page, total_pages}`
+- `POST /api/bills` — `{customer_name, customer_phone, doctor_name,
+  prescription_no, discount_percent, payment_mode, items:[{medicine_id, qty}]}`
+- `GET /api/bills?page=1&per_page=10&search=&status=&from=&to=`
 - `GET /api/bills/:id`, `POST /api/bills/:id/return`
 
-**Masters, users, misc**
+**Masters, users, and reporting**
 
-- `GET/POST/PUT/DELETE /api/gst-rates`, `/api/unit-types`, `/api/payment-modes` (admin writes)
-- `GET /api/settings` (public), `PUT /api/settings`, `POST/DELETE /api/settings/logo` (admin)
-- `GET/POST/DELETE /api/users` (admin), `POST /api/change-password`
-- `GET /api/dashboard`, `GET /api/reports/sales?days=14`, `GET /api/suppliers`, `POST /api/purchases`, `GET /api/stock-movements`, `GET /api/customers`
+- `GET/POST/PUT/DELETE /api/gst-rates`, `/api/unit-types`, `/api/payment-modes`
+- `GET /api/settings`, `PUT /api/settings`, `POST/DELETE /api/settings/logo`
+- `GET/POST/DELETE /api/users`, `POST /api/change-password`
+- `GET /api/dashboard`, `GET /api/reports/sales?days=14`
+- `GET /api/suppliers`, `POST /api/purchases`, `GET /api/stock-movements`,
+  `GET /api/customers`
 
-Billing model: `quantity` = tablets/units in stock, `price` = per-tablet price in ₹, `unit` = tablet/capsule/sachet/strip/bottle/syrup/injection/tube.
+Health check: `GET /api/health`.
+
+Billing model: `quantity` is units in stock, `price` is the per-unit price in
+INR, and `unit` is tablet/capsule/sachet/strip/bottle/syrup/injection/tube.
 
 ## Project structure
 
+```text
+backend/              Flask API, models, migrations, waitress entrypoint
+frontend/             React source and Vite build output
+tests/                Backend API and billing regression tests
+docs/screenshots/     README images
+.github/workflows/    CI and publish pipelines
+Dockerfile            Node build stage + Python runtime stage
+docker-compose.yml    One-command run with persistent volumes
+ARCHITECTURE.md       Design and data model
+INSTALLATION.md       Installation and operations manual
+ruff.toml             Backend lint configuration
+start.bat             Windows launcher
+run.sh                Linux/macOS launcher
 ```
-backend/
-  app.py            # Flask REST API + serves frontend/dist
-  models.py         # SQLAlchemy models (medicines, bills, users, masters…)
-  migrations.py     # versioned, idempotent schema migrations
-  requirements.txt
-  pharmacy.db       # SQLite data (auto-created)
-  uploads/          # logos + import CSVs
-frontend/
-  src/              # React UI (App.jsx, api.js)
-  dist/             # production build served by Flask
-start.bat           # Windows launcher
-```
+
+## Data and backups
+
+Data lives in `backend/pharmacy.db`; uploaded logos live in
+`backend/uploads/`. Docker deployments use the `pharmacy-data` and
+`pharmacy-uploads` volumes. Stop the app before copying the SQLite file, or use
+the backup commands in [INSTALLATION.md](INSTALLATION.md).
+
+## License
+
+Add a license before distributing the application publicly.

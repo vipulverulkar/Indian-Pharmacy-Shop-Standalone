@@ -88,6 +88,17 @@ jobs:
       - name: Package
         shell: pwsh
         run: Compress-Archive -Path dist/IndianPharmacyShop.exe -DestinationPath IndianPharmacyShop-windows.zip
+      - name: Build summary
+        shell: pwsh
+        run: |
+          $size = (Get-Item IndianPharmacyShop-windows.zip).Length
+          $sizeMB = [math]::Round($size / 1MB, 2)
+          "### Windows EXE" >> $env:GITHUB_STEP_SUMMARY
+          "| Property | Value |" >> $env:GITHUB_STEP_SUMMARY
+          "|----------|-------|" >> $env:GITHUB_STEP_SUMMARY
+          "| File | IndianPharmacyShop-windows.zip |" >> $env:GITHUB_STEP_SUMMARY
+          "| Size | $sizeMB MB |" >> $env:GITHUB_STEP_SUMMARY
+          "| Executable | IndianPharmacyShop.exe |" >> $env:GITHUB_STEP_SUMMARY
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -124,6 +135,16 @@ jobs:
         run: pyinstaller --noconfirm --clean pharmacy.spec
       - name: Package
         run: zip -r IndianPharmacyShop-linux.zip dist/IndianPharmacyShop
+      - name: Build summary
+        run: |
+          size=$(stat -c%s IndianPharmacyShop-linux.zip)
+          sizeMB=$(awk "BEGIN {printf \"%.2f\", $size/1024/1024}")
+          echo "### Linux EXE" >> $GITHUB_STEP_SUMMARY
+          echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| File | IndianPharmacyShop-linux.zip |" >> $GITHUB_STEP_SUMMARY
+          echo "| Size | $sizeMB MB |" >> $GITHUB_STEP_SUMMARY
+          echo "| Executable | IndianPharmacyShop |" >> $GITHUB_STEP_SUMMARY
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:

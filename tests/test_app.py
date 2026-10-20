@@ -45,10 +45,11 @@ def test_health(client):
     assert res.get_json() == {"status": "ok", "currency": "INR"}
 
 
-def test_frontend_is_served(client):
+def test_frontend_or_api_hint_is_served(client):
     res = client.get("/")
     assert res.status_code == 200
-    assert b'id="root"' in res.data
+    if b'id="root"' not in res.data:
+        assert b"/api/health" in res.data
 
 
 def test_login_rejects_bad_password(client):

@@ -93,7 +93,8 @@ jobs:
           docker run -d --name pharmacy-ci -p 5000:5000 pharmacy-app:ci
           for i in $(seq 1 30); do
             if curl -fsS http://127.0.0.1:5000/api/health >/dev/null; then
-              echo "Health check passed"
+              curl -fsS http://127.0.0.1:5000/ | grep -q 'id="root"'
+              echo "Health and static UI checks passed"
               exit 0
             fi
             sleep 2
